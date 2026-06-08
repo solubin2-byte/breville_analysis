@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>브레빌 | 한국 시장 인사이트 리포트 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg:        #f4f5f7;
+  --bg2:       #ffffff;
+  --bg3:       #f0f1f4;
+  --ink:       #1a1e2a;
+  --ink2:      #2d3345;
+  --ink3:      #5c6275;
+  --ink4:      #9399a8;
+  --border:    #e2e4ea;
+  --border2:   #d0d3db;
+  --accent:    #d4622a;
+  --accent2:   #e8855a;
+  --accent-dim:rgba(212,98,42,0.10);
+  --teal:      #1e8a6e;
+  --teal-dim:  rgba(30,138,110,0.10);
+  --sky:       #2563a8;
+  --sky-dim:   rgba(37,99,168,0.10);
+  --gold:      #b08828;
+  --gold-dim:  rgba(176,136,40,0.10);
+  --rose:      #b52e55;
+  --rose-dim:  rgba(181,46,85,0.10);
+  --violet:    #6b3fb5;
+  --violet-dim:rgba(107,63,181,0.10);
+  --sidebar-w: 230px;
+  --topbar-h:  52px;
+  --sans: 'DM Sans','Noto Sans KR',sans-serif;
+  --mono: 'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);display:flex;min-height:100vh;font-size:13px;line-height:1.65;}
+
+/* ──── SIDEBAR ──── */
+.sidebar{
+  width:var(--sidebar-w);background:var(--ink);
+  position:fixed;top:0;left:0;bottom:0;
+  display:flex;flex-direction:column;z-index:100;overflow-y:auto;
+}
+.sb-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sb-logo .badge{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--accent2);text-transform:uppercase;margin-bottom:8px;}
+.sb-logo .title{font-size:13px;font-weight:600;color:#fff;line-height:1.35;font-family:'Noto Sans KR',sans-serif;}
+.sb-logo .sub{font-size:11px;color:rgba(255,255,255,.38);margin-top:4px;}
+.sb-nav{padding:16px 0;flex:1;}
+.nav-section{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.3);text-transform:uppercase;padding:12px 20px 6px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 20px;font-size:12px;color:rgba(255,255,255,.55);cursor:pointer;transition:background .15s,color .15s;border-left:2px solid transparent;font-family:'Noto Sans KR',sans-serif;}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.nav-item.active{background:rgba(212,98,42,.15);color:var(--accent2);border-left-color:var(--accent2);}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.sb-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.07);font-size:10px;color:rgba(255,255,255,.25);line-height:1.6;}
+
+/* ──── TOPBAR ──── */
+.topbar{
+  position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);
+  background:rgba(244,245,247,.95);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;
+  padding:0 28px;gap:14px;z-index:90;
+}
+.topbar-title{font-size:13px;font-weight:500;color:var(--ink2);font-family:'Noto Sans KR',sans-serif;}
+.topbar-sep{color:var(--border2);font-size:14px;}
+.topbar-sub{font-size:12px;color:var(--ink4);}
+.topbar-badge{margin-left:auto;font-family:var(--mono);font-size:10px;background:var(--accent-dim);color:var(--accent);padding:3px 9px;border-radius:20px;border:1px solid rgba(212,98,42,.2);}
+
+/* ──── MAIN ──── */
+.main{margin-left:var(--sidebar-w);padding-top:var(--topbar-h);min-height:100vh;}
+.section{padding:32px 28px;border-bottom:1px solid var(--border);}
+.section:last-child{border-bottom:none;}
+.section-header{margin-bottom:22px;}
+.section-num{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:6px;}
+.section-title{font-size:20px;font-weight:700;color:var(--ink);font-family:'Noto Sans KR',sans-serif;line-height:1.3;}
+.section-desc{font-size:12.5px;color:var(--ink3);margin-top:7px;line-height:1.7;max-width:720px;}
+
+/* ──── KPI CARDS ──── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px;}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.kpi-label{font-size:11px;color:var(--ink3);margin-bottom:6px;font-family:'Noto Sans KR',sans-serif;}
+.kpi-value{font-size:22px;font-weight:700;color:var(--ink);font-family:var(--mono);line-height:1;}
+.kpi-unit{font-size:12px;font-weight:400;color:var(--ink3);margin-left:2px;}
+.kpi-change{font-size:11px;margin-top:6px;font-family:'Noto Sans KR',sans-serif;}
+.up{color:var(--teal);} .dn{color:var(--rose);}
+
+/* ──── CARDS ──── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px;}
+.card-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;font-family:'Noto Sans KR',sans-serif;}
+.card-sub{font-size:11.5px;color:var(--ink3);line-height:1.7;}
+
+/* ──── 2-COL GRID ──── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+/* ──── CHART WRAPPER ──── */
+.chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;}
+.chart-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;font-family:'Noto Sans KR',sans-serif;}
+.chart-note{font-size:11px;color:var(--ink4);margin-bottom:14px;line-height:1.6;}
+.chart-canvas{position:relative;}
+
+/* ──── TAG ──── */
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:500;font-family:'Noto Sans KR',sans-serif;}
+.tag-accent{background:var(--accent-dim);color:var(--accent);}
+.tag-teal{background:var(--teal-dim);color:var(--teal);}
+.tag-sky{background:var(--sky-dim);color:var(--sky);}
+.tag-gold{background:var(--gold-dim);color:var(--gold);}
+.tag-rose{background:var(--rose-dim);color:var(--rose);}
+.tag-violet{background:var(--violet-dim);color:var(--violet);}
+
+/* ──── TABLE ──── */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.tbl th{background:var(--bg3);color:var(--ink2);font-weight:600;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border2);font-family:'Noto Sans KR',sans-serif;}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink2);vertical-align:top;font-family:'Noto Sans KR',sans-serif;line-height:1.6;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#f8f9fb;}
+.tbl .hl{font-weight:600;color:var(--accent);}
+
+/* ──── TREND ITEMS ──── */
+.trend-list{display:flex;flex-direction:column;gap:10px;}
+.trend-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.trend-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.trend-body .t-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;font-family:'Noto Sans KR',sans-serif;}
+.trend-body .t-desc{font-size:12px;color:var(--ink3);line-height:1.65;}
+
+/* ──── KBF BARS ──── */
+.kbf-list{display:flex;flex-direction:column;gap:8px;}
+.kbf-item{display:flex;align-items:center;gap:10px;}
+.kbf-label{width:140px;font-size:12px;color:var(--ink2);font-family:'Noto Sans KR',sans-serif;flex-shrink:0;}
+.kbf-bar-wrap{flex:1;background:var(--bg3);border-radius:4px;height:8px;overflow:hidden;}
+.kbf-bar{height:100%;border-radius:4px;}
+.kbf-pct{width:36px;font-size:11px;color:var(--ink3);text-align:right;font-family:var(--mono);}
+
+/* ──── BRAND CARD ──── */
+.brand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.brand-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;}
+.brand-card-header{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.brand-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.brand-name{font-size:14px;font-weight:700;color:var(--ink);font-family:'Noto Sans KR',sans-serif;}
+.brand-origin{font-size:11px;color:var(--ink4);}
+.brand-price{font-size:12px;font-weight:600;color:var(--sky);font-family:var(--mono);}
+.brand-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.brand-desc{font-size:12px;color:var(--ink3);line-height:1.65;font-family:'Noto Sans KR',sans-serif;}
+.brand-strength{font-size:11.5px;color:var(--ink3);line-height:1.65;}
+
+/* ──── FOOTNOTE ──── */
+.footnote{font-size:10.5px;color:var(--ink4);margin-top:14px;line-height:1.7;padding-top:12px;border-top:1px solid var(--border);}
+.footnote a{color:var(--sky);text-decoration:none;}
+.footnote a:hover{text-decoration:underline;}
+
+/* ──── POSITIONING CANVAS ──── */
+.map-canvas{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+
+/* ──── SCROLL ──── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:4px;}
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="badge">Market Intelligence Report</div>
+    <div class="title">브레빌 코리아<br>시장 인사이트 2026</div>
+    <div class="sub">Breville Korea · H1 2026</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="scrollTo('s0')"><span class="nav-dot"></span>리서치 개요</div>
+    <div class="nav-section">홈커피 시장</div>
+    <div class="nav-item" onclick="scrollTo('s1')"><span class="nav-dot"></span>에스프레소 머신 트렌드</div>
+    <div class="nav-item" onclick="scrollTo('s2')"><span class="nav-dot"></span>브랜드 포지셔닝 맵</div>
+    <div class="nav-item" onclick="scrollTo('s3')"><span class="nav-dot"></span>브레빌 마케팅 전략</div>
+    <div class="nav-item" onclick="scrollTo('s4')"><span class="nav-dot"></span>에스프레소 머신 KBF</div>
+    <div class="nav-section">인접 시장</div>
+    <div class="nav-item" onclick="scrollTo('s5')"><span class="nav-dot"></span>푸드프로세서 시장</div>
+    <div class="nav-item" onclick="scrollTo('s6')"><span class="nav-dot"></span>토스터 시장</div>
+  </nav>
+  <div class="sb-footer">
+    <strong style="color:rgba(255,255,255,.5)">인크로스데이터랩(IDL)</strong><br>
+    브레빌 코리아 시장 인사이트 분석<br>
+    2026. 06
+  </div>
+</aside>
+
+<!-- ── TOPBAR ── -->
+<div class="topbar">
+  <span class="topbar-title" style="font-family:'Noto Sans KR',sans-serif">인크로스데이터랩(IDL)</span>
+  <span class="topbar-sep">|</span>
+  <span class="topbar-sub">Breville Korea — 한국 시장 트렌드 & 인사이트 분석</span>
+  <span class="topbar-badge">2026.06 업데이트</span>
+</div>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+<!-- ──────────────────── SECTION 0: 개요 ──────────────────── -->
+<section class="section" id="s0">
+  <div class="section-header">
+    <div class="section-num">Overview</div>
+    <div class="section-title">리서치 개요</div>
+    <div class="section-desc">
+      2026년 1–6월 기준 국내 홈커피 시장을 <b>에스프레소 머신·홈바리스타·프리미엄 커피가전</b> 관점에서 재정의한 인사이트 리포트. 기존 캡슐커피 중심 서술은 보조 시장으로 축소하고, 브레빌의 핵심 경쟁 축인 원두 기반 머신·추출 경험·스페셜티 커피 리터러시를 중심으로 업데이트함.
+    </div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">한국 커피 시장 규모 (2024)</div>
+      <div class="kpi-value">12.46<span class="kpi-unit">십억 $</span></div>
+      <div class="kpi-change up">▲ 2025–2034 CAGR 9.7% 전망</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">한국인 1인당 연간 커피 음용 (2024)</div>
+      <div class="kpi-value">416<span class="kpi-unit">잔</span></div>
+      <div class="kpi-change up">아시아 최고 수준 소비량</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">글로벌 커피 시장 (2025)</div>
+      <div class="kpi-value">249.3<span class="kpi-unit">십억 $</span></div>
+      <div class="kpi-change up">▲ 2033년 380.3십억 $ 전망</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">가정용 커피머신 시장 방향</div>
+      <div class="kpi-value">Bean<span class="kpi-unit">-to-Cup</span></div>
+      <div class="kpi-change up">원두 분쇄·추출·우유 스티밍 통합형 성장</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">브레빌 핵심 카테고리</div>
+      <div class="kpi-value">3rd<span class="kpi-unit"> Wave</span></div>
+      <div class="kpi-change up">제3의 물결 스페셜티 커피 경험 소구</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">2026 시장 키워드</div>
+      <div class="kpi-value">취미<span class="kpi-unit">화</span></div>
+      <div class="kpi-change up">커피 머신 구매 = 취향·루틴·경험 투자</div>
+    </div>
+  </div>
+  <div class="footnote" style="margin-top:0;padding-top:10px;">
+    분석 기간: 2026.01 – 2026.06 / 주요 출처: USDA FAS Coffee and Tea Market Brief(2025.09), Expert Market Research(2025), Grand View Research(2025), Breville Korea 공식몰, Deloitte Global Coffee Trends 2024, 주요 커피머신 리뷰·전문 매체(2025–2026). 기존 캡슐커피 수치는 시장 배경용으로만 보조 활용함.
+  </div>
+</section>
+
+<!-- ──────────────────── SECTION 1: 홈커피 트렌드 ──────────────────── -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">Section 01</div>
+    <div class="section-title">국내 홈커피 시장 트렌드 분석 — 에스프레소 머신 중심</div>
+    <div class="section-desc">캡슐커피를 ‘입문형 홈커피’로 분리하고, 브레빌의 성장 기회가 큰 원두 기반 머신·홈바리스타·스페셜티 커피 경험을 중심으로 시장을 재해석함.</div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:14px;">
+    <div class="chart-wrap">
+      <div class="chart-title">홈커피 구매 동기의 변화</div>
+      <div class="chart-note">2026년 홈커피는 ‘간편한 카페 대체’에서 ‘취향을 구현하는 홈바리스타 경험’으로 이동. 브레빌은 추출 과정 자체를 즐기는 고관여 소비자와 가장 강하게 접점 형성.</div>
+      <div class="chart-canvas" style="height:220px;">
+        <canvas id="chartFactor"></canvas>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">홈커피 세그먼트 재정의</div>
+      <div class="chart-note">캡슐은 규모가 큰 편의형 시장, 전자동은 원두 기반 편의형 시장, 반자동은 스페셜티·취미형 시장으로 구분. 브레빌은 ‘반자동+자동화 보조’의 중간 지점에서 확장 가능성이 높음.</div>
+      <div class="chart-canvas" style="height:220px;">
+        <canvas id="chartType"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="three-col" style="margin-bottom:14px;">
+    <div class="kpi">
+      <div class="kpi-label">주요 타깃 전환</div>
+      <div class="kpi-value" style="font-size:18px;">캡슐<span class="kpi-unit"> → 원두</span></div>
+      <div class="kpi-change up">편의성 경험 이후 맛·원두·추출 품질로 관심 이동</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">핵심 성장 세그먼트</div>
+      <div class="kpi-value" style="font-size:18px;">홈바리스타</div>
+      <div class="kpi-change up">추출·그라인딩·라떼아트까지 즐기는 취미형 소비</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">구매 여정 특징</div>
+      <div class="kpi-value" style="font-size:18px;">리뷰<span class="kpi-unit"> 탐색</span></div>
+      <div class="kpi-change up">유튜브·커뮤니티·블로그 장기 후기가 전환 변수</div>
+    </div>
+  </div>
+
+  <div class="trend-list">
+    <div class="trend-item">
+      <div class="trend-icon" style="background:var(--accent-dim);">☕</div>
+      <div class="trend-body">
+        <div class="t-title">스페셜티 커피 리터러시 확산 — 머신 선택 기준이 ‘맛의 재현성’으로 이동</div>
+        <div class="t-desc">원산지·로스팅·분쇄도·추출 온도에 대한 관심이 높아지면서, 홈커피 소비자는 단순히 커피를 마시는 것을 넘어 ‘카페 수준의 맛을 집에서 구현할 수 있는가’를 따지기 시작함. 브레빌의 PID 온도 제어, 저압 프리 인퓨전, 그라인더 일체형 구조는 이 니즈와 직접 연결됨. <span class="tag tag-accent">핵심 기회</span></div>
+      </div>
+    </div>
+    <div class="trend-item">
+      <div class="trend-icon" style="background:var(--gold-dim);">🏠</div>
+      <div class="trend-body">
+        <div class="t-title">홈카페의 고급화 — ‘기계 구매’가 아니라 ‘집 안의 커피 루틴’에 투자</div>
+        <div class="t-desc">가정 내 커피 존, 원두 보관, 잔·그라인더·탬퍼 등 주변 액세서리까지 함께 구매하는 소비가 확대. 커피머신은 주방 가전이면서 동시에 취향을 보여주는 라이프스타일 오브제로 인식됨. <span class="tag tag-gold">라이프스타일화</span></div>
+      </div>
+    </div>
+    <div class="trend-item">
+      <div class="trend-icon" style="background:var(--teal-dim);">📈</div>
+      <div class="trend-body">
+        <div class="t-title">프로슈머 전환 — 캡슐·전자동 경험자가 반자동으로 업그레이드</div>
+        <div class="t-desc">캡슐은 입문 장벽을 낮추지만, 커피 소비량이 늘고 맛 차이를 인지한 소비자는 원두 기반 머신으로 이동. 전자동은 편의성, 반자동은 조작감과 커스터마이징을 제공하며, 브레빌은 ‘직접 만들지만 실패를 줄여주는’ 포지션으로 전환 장벽을 낮출 수 있음. <span class="tag tag-teal">업그레이드 수요</span></div>
+      </div>
+    </div>
+    <div class="trend-item">
+      <div class="trend-icon" style="background:var(--violet-dim);">🎥</div>
+      <div class="trend-body">
+        <div class="t-title">구매 여정의 콘텐츠화 — 리뷰·비교·튜토리얼이 광고보다 강한 설득력 보유</div>
+        <div class="t-desc">고가 커피머신 구매자는 공식 광고보다 장기 사용기, 추출 세팅, 세척 난이도, 원두 추천 등 실사용 콘텐츠를 신뢰함. 따라서 브레빌은 단순 제품 광고보다 ‘처음 30일 세팅 가이드’, ‘라떼아트 입문’, ‘원두별 분쇄도 가이드’형 콘텐츠 확장이 효과적임. <span class="tag tag-violet">콘텐츠 전환</span></div>
+      </div>
+    </div>
+    <div class="trend-item">
+      <div class="trend-icon" style="background:var(--sky-dim);">🤖</div>
+      <div class="trend-body">
+        <div class="t-title">자동화 보조형 반자동 — ‘바리스타 경험’과 ‘실패 최소화’의 결합</div>
+        <div class="t-desc">최근 프리미엄 머신은 자동 분쇄·도징·탬핑·우유 스티밍, 콜드브루·콜드 에스프레소 등 기능을 확대하며 반자동과 전자동의 경계를 낮추고 있음. Oracle Jet처럼 가이던스 기반 추출을 제공하는 제품은 입문자에게도 고급 경험을 열어주는 방향으로 해석 가능함. <span class="tag tag-sky">제품 진화</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footnote">
+    * 한국 커피 시장 및 소비량: USDA FAS Coffee and Tea Market Brief 2025.09, Expert Market Research 2025 &nbsp;/&nbsp; 브레빌 제3의 물결 스페셜티 커피·4가지 핵심 포뮬러: <a href="https://www.breville.com/ko-kr/shop/espresso" target="_blank">Breville Korea 공식몰</a> &nbsp;/&nbsp; Oracle Jet 자동 분쇄·도징·탬핑·콜드브루 기능: <a href="https://www.breville.com/ko-kr/landing/oracle-jet" target="_blank">Breville Korea Oracle Jet</a> &nbsp;/&nbsp; 글로벌 커피 시장 규모: Grand View Research 2025 &nbsp;/&nbsp; 홈 커피존·카페코어 트렌드: Better Homes & Gardens 2025
+  </div>
+</section>
+
+<!-- ──────────────────── SECTION 2: 포지셔닝 맵 ──────────────────── -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">Section 02</div>
+    <div class="section-title">브랜드 포지셔닝 맵 비교 — 원두 기반 머신 중심</div>
+    <div class="section-desc">브레빌의 실질 경쟁군을 캡슐 브랜드가 아닌 전자동·반자동·프리미엄 원두 기반 머신으로 재정의함. 캡슐 브랜드는 ‘업그레이드 전 단계’로만 보조 표기함.</div>
+  </div>
+
+  <div class="chart-wrap" style="margin-bottom:14px;">
+    <div class="chart-title">포지셔닝 맵 ① — 가격 × 커피 관여도</div>
+    <div class="chart-note">X축: 주력 모델 공식 정가 기준 가격(만 원) / Y축: 커피 관여도·추출 개입도. ★ 브레빌은 80~350만 원대에서 ‘높은 관여도+상대적 접근성’을 보유한 프로슈머 브랜드로 해석됨.</div>
+    <div class="chart-canvas" style="height:380px;">
+      <canvas id="mapPrice"></canvas>
+    </div>
+    <div class="footnote">가격: 각 브랜드 공식몰·국내 유통가 기준(2026.06). 관여도: 제품 구조, 추출 개입 수준, 커뮤니티 언급 성격을 종합한 정성 지표.</div>
+  </div>
+
+  <div class="chart-wrap" style="margin-bottom:14px;">
+    <div class="chart-title">포지셔닝 맵 ② — 편의성 × 커피 품질 인식</div>
+    <div class="chart-note">브레빌은 전자동 대비 손이 가지만, 반자동의 맛·추출 통제력을 제공하는 ‘경험형 프리미엄’ 영역에 위치. Oracle 계열은 자동화 보조 기능으로 편의성 축까지 확장 가능.</div>
+    <div class="chart-canvas" style="height:380px;">
+      <canvas id="mapMethod"></canvas>
+    </div>
+    <div class="footnote">품질 인식: 온라인 리뷰·커뮤니티·전문 리뷰에서 반복 언급되는 크레마, 온도 안정성, 우유 스티밍, 원두 활용성 등을 종합한 정성 지표.</div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:14px;">
+    <div class="card">
+      <div class="card-title" style="color:var(--accent);">● 브레빌의 직접 경쟁군</div>
+      <table class="tbl">
+        <thead><tr><th>브랜드</th><th>주요 방식</th><th>가격대</th><th>핵심 소구</th><th>브레빌 대비</th></tr></thead>
+        <tbody>
+          <tr><td class="hl">★ 브레빌</td><td>반자동·자동화 보조</td><td>80–350만 원</td><td>홈바리스타, 스페셜티, 추출 경험</td><td>기준 브랜드</td></tr>
+          <tr><td><b>드롱기</b></td><td>전자동</td><td>50–180만 원</td><td>원터치 편의성, 이탈리아 정통</td><td>편의성 우위</td></tr>
+          <tr><td><b>유라</b></td><td>프리미엄 전자동</td><td>160–400만 원</td><td>럭셔리 자동화, 유지관리 편의</td><td>가격·자동화 상위</td></tr>
+          <tr><td><b>필립스</b></td><td>전자동</td><td>40–130만 원</td><td>가성비, 라떼고 세척 편의</td><td>입문 전자동 경쟁</td></tr>
+          <tr><td><b>엘로치오</b></td><td>반자동</td><td>80–300만 원</td><td>국내 제조, 마니아·상업용 감성</td><td>마니아 니치 경쟁</td></tr>
+          <tr><td><b>스메그</b></td><td>반자동·전자동</td><td>80–200만 원</td><td>인테리어 가전, 디자인</td><td>감성 디자인 경쟁</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--sky);">● 보조 경쟁군: 캡슐 머신</div>
+      <div class="card-sub">
+        네스프레소·카누·일리 등은 브레빌의 직접 경쟁자라기보다 <b>홈커피 입문 단계</b>이자 향후 업그레이드 가능성이 있는 전환 풀로 해석하는 편이 적합함. 캡슐 시장 수치가 큰 것은 시장 배경으로 의미가 있으나, 브레빌 전략에서는 ‘편의성에 익숙해진 소비자가 왜 원두 기반 머신으로 이동하는가’를 설명하는 보조 자료로 제한하는 것이 적절함.
+      </div>
+      <div style="margin-top:14px;" class="card-title">전환 메시지</div>
+      <div class="card-sub">
+        캡슐의 장점은 간편함, 한계는 맛의 커스터마이징·원두 선택·장기 비용. 브레빌은 이 한계를 느끼기 시작한 소비자에게 “집에서도 실패를 줄이면서 직접 만드는 카페 퀄리티”를 제안할 수 있음.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────── SECTION 3: 마케팅 전략 ──────────────────── -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">Section 03</div>
+    <div class="section-title">브레빌 중심 마케팅 전략 및 경쟁 대응</div>
+    <div class="section-desc">브랜드 비교를 단순 기능 나열에서 ‘어떤 소비자를 어떤 메시지로 전환할 것인가’ 중심으로 재정리함.</div>
+  </div>
+
+  <div class="brand-grid">
+    <div class="brand-card" style="border-top:3px solid var(--accent);">
+      <div class="brand-card-header"><div class="brand-dot" style="background:var(--accent);"></div><div><div class="brand-name">브레빌(Breville)</div><div class="brand-origin">🇦🇺 호주 | 홈바리스타·반자동 전문</div></div></div>
+      <div class="brand-tags"><span class="tag tag-accent">스페셜티</span><span class="tag tag-accent">바리스타 경험</span><span class="tag tag-accent">자동화 보조</span></div>
+      <div class="brand-desc"><strong>전략 방향:</strong> “커피를 마시는 기계”가 아니라 “나만의 커피를 만드는 경험”으로 포지셔닝. 제3의 물결 스페셜티 커피, 분쇄·도징·추출·스팀의 4가지 핵심 포뮬러를 공식 언어로 유지하되, 입문자의 실패 불안을 낮추는 가이드 콘텐츠를 강화.</div>
+      <div class="brand-desc"><strong>추천 콘텐츠:</strong> 첫 머신 세팅 30일 가이드, 원두별 분쇄도 세팅, 라떼아트 입문, 캡슐에서 반자동으로 넘어오는 법, 머신 관리 루틴.</div>
+      <div class="brand-strength"><strong>핵심 USP:</strong> 내장 그라인더, PID 온도 제어, 저압 프리 인퓨전, 스팀 노즐, Oracle 계열의 자동 분쇄·도징·탬핑·바리스타 가이던스.</div>
+    </div>
+
+    <div class="brand-card" style="border-top:3px solid var(--sky);">
+      <div class="brand-card-header"><div class="brand-dot" style="background:var(--sky);"></div><div><div class="brand-name">드롱기(De'Longhi)</div><div class="brand-origin">🇮🇹 이탈리아 | 전자동 에스프레소</div></div></div>
+      <div class="brand-tags"><span class="tag tag-sky">원터치</span><span class="tag tag-sky">전자동</span><span class="tag tag-sky">대중 인지도</span></div>
+      <div class="brand-desc"><strong>핵심 소구:</strong> 원두 자동 분쇄·추출, 관리 편의성, 이탈리아 정통성. 커피 취미보다 매일 편하게 마시는 루틴형 소비자를 공략.</div>
+      <div class="brand-desc"><strong>브레빌 대응:</strong> 드롱기가 편의성으로 설득한다면, 브레빌은 ‘내가 원하는 맛을 직접 조절하는 즐거움’과 ‘카페 수준의 라떼·에스프레소 재현성’을 강조.</div>
+    </div>
+
+    <div class="brand-card" style="border-top:3px solid var(--gold);">
+      <div class="brand-card-header"><div class="brand-dot" style="background:var(--gold);"></div><div><div class="brand-name">유라(JURA)</div><div class="brand-origin">🇨🇭 스위스 | 프리미엄 전자동</div></div></div>
+      <div class="brand-tags"><span class="tag tag-gold">럭셔리</span><span class="tag tag-gold">자동화</span><span class="tag tag-gold">관리 편의</span></div>
+      <div class="brand-desc"><strong>핵심 소구:</strong> 고가 전자동 시장에서 버튼 하나로 완성되는 프리미엄 커피와 자동 세척을 강조.</div>
+      <div class="brand-desc"><strong>브레빌 대응:</strong> 유라 대비 가격 접근성과 창작 경험을 강조. ‘완전 자동 럭셔리’가 아닌 ‘직접 만드는 프리미엄’ 영역으로 차별화.</div>
+    </div>
+
+    <div class="brand-card" style="border-top:3px solid var(--violet);">
+      <div class="brand-card-header"><div class="brand-dot" style="background:var(--violet);"></div><div><div class="brand-name">필립스(Philips)</div><div class="brand-origin">🇳🇱 네덜란드 | 입문 전자동</div></div></div>
+      <div class="brand-tags"><span class="tag tag-violet">가성비</span><span class="tag tag-violet">세척 편의</span><span class="tag tag-violet">입문형</span></div>
+      <div class="brand-desc"><strong>핵심 소구:</strong> 전자동 입문, 라떼고 세척 편의, 합리적 가격.</div>
+      <div class="brand-desc"><strong>브레빌 대응:</strong> 가격 경쟁보다 결과물 차이를 보여주는 비교 콘텐츠 필요. 같은 원두로 추출한 맛·스팀·라떼아트 차이를 시각적으로 증명.</div>
+    </div>
+
+    <div class="brand-card" style="border-top:3px solid var(--teal);">
+      <div class="brand-card-header"><div class="brand-dot" style="background:var(--teal);"></div><div><div class="brand-name">엘로치오(El Rocio)</div><div class="brand-origin">🇰🇷 한국 | 반자동·마니아</div></div></div>
+      <div class="brand-tags"><span class="tag tag-teal">국내 제조</span><span class="tag tag-teal">마니아</span><span class="tag tag-teal">상업용 감성</span></div>
+      <div class="brand-desc"><strong>핵심 소구:</strong> 국내 제조 신뢰, 마니아 커뮤니티 기반 품질 인식, 상업용 머신 감성.</div>
+      <div class="brand-desc"><strong>브레빌 대응:</strong> 마니아층에서는 추출 성능과 내구성 근거, 입문·중급층에서는 조작성과 A/S·콘텐츠 생태계로 방어.</div>
+    </div>
+
+    <div class="brand-card" style="border-top:3px solid var(--rose);">
+      <div class="brand-card-header"><div class="brand-dot" style="background:var(--rose);"></div><div><div class="brand-name">스메그(Smeg)</div><div class="brand-origin">🇮🇹 이탈리아 | 디자인 가전</div></div></div>
+      <div class="brand-tags"><span class="tag tag-rose">인테리어</span><span class="tag tag-rose">레트로</span><span class="tag tag-rose">감성</span></div>
+      <div class="brand-desc"><strong>핵심 소구:</strong> 성능보다 주방 오브제와 라이프스타일 이미지를 강조.</div>
+      <div class="brand-desc"><strong>브레빌 대응:</strong> 브레빌도 주방 인테리어 요소를 활용하되, 디자인만이 아니라 ‘실제로 커피 취향을 깊게 만드는 장비’라는 기능적 감성을 함께 전달.</div>
+    </div>
+  </div>
+
+  <div class="three-col" style="margin-top:14px;">
+    <div class="card"><div class="card-title">Primary Target</div><div class="card-sub"><b>30~40대 커피 취미층</b><br>원두·로스터리·라떼아트에 관심이 있고, 집 안의 루틴과 취향 투자에 비용을 지불할 의향이 높은 소비자.</div></div>
+    <div class="card"><div class="card-title">Secondary Target</div><div class="card-sub"><b>캡슐·전자동 업그레이드층</b><br>편의형 홈커피를 경험했지만 맛·커스터마이징·장기 비용에서 아쉬움을 느끼는 소비자.</div></div>
+    <div class="card"><div class="card-title">Occasion Target</div><div class="card-sub"><b>신혼·이사·주방 리뉴얼</b><br>고관여 가전 구매 시점에 프리미엄 주방 오브제이자 취미 장비로 제안 가능.</div></div>
+  </div>
+</section>
+
+<!-- ──────────────────── SECTION 4: KBF ──────────────────── -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">Section 04</div>
+    <div class="section-title">에스프레소 커피 머신 구매 고려 요인 (KBF)</div>
+    <div class="section-desc">캡슐커피 구매 요인이 아닌, 원두 기반 에스프레소 머신 구매자의 실질 고려 요인으로 재정리함. 맛·재현성·관리 편의·학습 난이도가 핵심 변수임.</div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:14px;">
+    <div class="chart-wrap">
+      <div class="chart-title">KBF 중요도 — 에스프레소 머신 구매자 관점</div>
+      <div class="chart-note">커뮤니티·유튜브 리뷰·제품 리뷰에서 반복적으로 언급되는 구매 고려 요인을 정성 지표화</div>
+      <div class="chart-canvas" style="height:260px;">
+        <canvas id="chartKbf"></canvas>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="kbf-list">
+        <div class="kbf-item"><div class="kbf-label">① 맛·추출 재현성</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:90%;background:var(--accent);"></div></div><div class="kbf-pct">90%</div></div>
+        <div class="kbf-item"><div class="kbf-label">② 관리·청소 편의</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:82%;background:var(--teal);"></div></div><div class="kbf-pct">82%</div></div>
+        <div class="kbf-item"><div class="kbf-label">③ 가격 / 장기 비용</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:78%;background:var(--sky);"></div></div><div class="kbf-pct">78%</div></div>
+        <div class="kbf-item"><div class="kbf-label">④ 그라인더 품질</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:74%;background:var(--gold);"></div></div><div class="kbf-pct">74%</div></div>
+        <div class="kbf-item"><div class="kbf-label">⑤ 우유 스팀·라떼아트</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:66%;background:var(--violet);"></div></div><div class="kbf-pct">66%</div></div>
+        <div class="kbf-item"><div class="kbf-label">⑥ 학습 난이도</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:62%;background:var(--accent);"></div></div><div class="kbf-pct">62%</div></div>
+        <div class="kbf-item"><div class="kbf-label">⑦ A/S·보증 신뢰</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:58%;background:var(--sky);"></div></div><div class="kbf-pct">58%</div></div>
+        <div class="kbf-item"><div class="kbf-label">⑧ 디자인·주방 조화</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:52%;background:var(--rose);"></div></div><div class="kbf-pct">52%</div></div>
+        <div class="kbf-item"><div class="kbf-label">⑨ 브랜드·전문성</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:48%;background:var(--teal);"></div></div><div class="kbf-pct">48%</div></div>
+        <div class="kbf-item"><div class="kbf-label">⑩ 친환경·지속가능성</div><div class="kbf-bar-wrap"><div class="kbf-bar" style="width:24%;background:var(--gold);"></div></div><div class="kbf-pct">24%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="three-col">
+    <div class="card"><div class="card-title">🥇 Top KBF — 맛·재현성</div><div class="card-sub">에스프레소 머신 구매자는 크레마 자체보다 ‘매번 비슷한 품질로 추출되는가’를 중시함. 브레빌은 온도 제어·프리 인퓨전·분쇄 통합 구조를 통해 이 부분을 명확히 소구할 수 있음.</div></div>
+    <div class="card"><div class="card-title">🔧 최대 장벽 — 관리와 학습</div><div class="card-sub">반자동 머신의 가장 큰 진입 장벽은 세척·탬핑·분쇄도 조절에 대한 부담. Oracle 계열의 자동화 보조 기능과 초보자용 콘텐츠가 구매 전환의 핵심 방어 논리임.</div></div>
+    <div class="card"><div class="card-title">🎨 감성 변수 — 주방 조화</div><div class="card-sub">프리미엄 커피머신은 사용하지 않을 때도 주방에 노출되는 제품. 디자인·소재감·컬러는 성능 다음의 정서적 확신 요인으로 작용함.</div></div>
+  </div>
+  <div class="footnote">* KBF 수치는 정식 소비자 조사가 아닌 온라인 리뷰·커뮤니티·전문 리뷰 반복 언급을 기반으로 한 정성 지표. 향후 정량 조사를 통해 가중치 보정 권장.</div>
+</section>
+
+<!-- ──────────────────── SECTION 5: 푸드프로세서 ──────────────────── -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">Section 05</div>
+    <div class="section-title">푸드프로세서 / 블렌더 시장 현황 및 브랜드 분석</div>
+    <div class="section-desc">국내 프리미엄 푸드프로세서·블렌더 시장 현황 및 닌자(SharkNinja), 비타믹스(Vitamix), 브레빌 등 주요 브랜드 포지셔닝을 분석함.</div>
+  </div>
+
+  <div class="kpi-grid" style="margin-bottom:18px;">
+    <div class="kpi">
+      <div class="kpi-label">글로벌 소형가전 시장 (2025E)</div>
+      <div class="kpi-value">9.62<span class="kpi-unit">조 원</span></div>
+      <div class="kpi-change up">▲ 유로모니터 2025 추정</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">글로벌 블렌더·푸드프로세서 시장</div>
+      <div class="kpi-value">CAGR<span class="kpi-unit"> 5.8%</span></div>
+      <div class="kpi-change up">▲ 2025–2034 성장 전망</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">전세계 블렌더 가정 보급률</div>
+      <div class="kpi-value">63<span class="kpi-unit">%</span></div>
+      <div class="kpi-change">글로벌 평균 (2025)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">닌자 포터블 블렌더 출시</div>
+      <div class="kpi-value">2024<span class="kpi-unit">.03</span></div>
+      <div class="kpi-change up">국내 포터블 블렌더 카테고리 개척</div>
+    </div>
+  </div>
+
+  <table class="tbl" style="margin-bottom:14px;">
+    <thead>
+      <tr>
+        <th>브랜드</th>
+        <th>국적·모기업</th>
+        <th>주요 제품</th>
+        <th>가격대 (국내)</th>
+        <th>핵심 포지셔닝</th>
+        <th>마케팅 전략</th>
+        <th>국내 현황</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="hl">닌자(Ninja)</td>
+        <td>🇺🇸 미국 / SharkNinja</td>
+        <td>블라스트 포터블 블렌더, 콤비 멀티쿠커, 푸드프로세서</td>
+        <td>5–25만 원</td>
+        <td>가성비 + 다기능 멀티쿠커<br>"라이프스타일 혁신"</td>
+        <td>팝업스토어(도산공원 꼴라보하우스), 인플루언서 마케팅, 가치소비 공략, '포터블' 카테고리 개척</td>
+        <td><span class="tag tag-teal">빠른 성장</span> 2024년 블라스트 출시 후 포터블 카테고리 선점. 2025년 콤비 확장. 국내 가치소비 트렌드와 맞닿아 상승세 지속.</td>
+      </tr>
+      <tr>
+        <td class="hl">비타믹스(Vitamix)</td>
+        <td>🇺🇸 미국</td>
+        <td>Ascent X 시리즈, E310, A3500</td>
+        <td>60–130만 원</td>
+        <td>전문가급 고성능 블렌딩<br>"평생 사용 내구성"</td>
+        <td>전문 요리사·건강 인플루언서 협업, 백화점 쿡킹 클래스, 업소용 레퍼런스 활용 B2C 파급</td>
+        <td><span class="tag tag-gold">니치 프리미엄</span> 건강·웰니스 관심 소비자 타깃. 고가 포지션에서 안정적 팬층 유지. 대중화보다 신뢰 구축 중심.</td>
+      </tr>
+      <tr>
+        <td class="hl">브레빌(Breville)</td>
+        <td>🇦🇺 호주</td>
+        <td>Super Q 블렌더, 스코르치, 각종 푸드프로세서</td>
+        <td>20–80만 원</td>
+        <td>프리미엄 주방가전 생태계<br>"당신의 주방을 완성하다"</td>
+        <td>커피머신 구매 고객 대상 크로스셀 전략. 공식몰 주방가전 풀라인업 제안.</td>
+        <td><span class="tag tag-sky">성장 중</span> 커피머신 브랜드 신뢰도를 기반으로 블렌더·푸드프로세서 인지도 확장 중. 커피머신 대비 아직 낮은 인지도.</td>
+      </tr>
+      <tr>
+        <td><strong>블렌텍(Blendtec)</strong></td>
+        <td>🇺🇸 미국</td>
+        <td>Designer 725, Total Classic</td>
+        <td>60–100만 원</td>
+        <td>"Will It Blend?" 화제성<br>스퀘어 디자인 차별화</td>
+        <td>바이럴 마케팅 시리즈, 업소용→가정용 연계. 국내는 수입 유통사 중심.</td>
+        <td><span class="tag tag-gold">소수 마니아</span> 비타믹스 대비 인지도 낮음. 국내 정식 AS 접근성 이슈.</td>
+      </tr>
+      <tr>
+        <td><strong>테팔(Tefal/SEB)</strong></td>
+        <td>🇫🇷 프랑스</td>
+        <td>무브 & 믹스, 프레스토믹스</td>
+        <td>5–20만 원</td>
+        <td>접근 가능한 프렌치 브랜드<br>대중 가성비</td>
+        <td>대형마트·이커머스 중심. 브랜드 신뢰도(테팔 코팅팬)를 블렌더·푸드프로세서로 확장.</td>
+        <td><span class="tag tag-rose">보합</span> 가격 경쟁 심화로 점유율 방어 중. 닌자의 공격적 확장에 압박 수준 증가.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">📌 닌자의 국내 시장 전략 심층 분석</div>
+      <div class="card-sub">
+        2024년 3월 닌자 블라스트 포터블 블렌더 출시를 통해 국내 시장에 본격 진입. 서울경제(2025.01) 보도 기준 '포터블 블렌더' 신규 카테고리를 국내 시장에 성공적으로 정착시킨 것으로 평가됨. 이동성·공간 효율을 핵심 소구점으로 1인 가구·직장인 타깃 공략. 2024년 11월 출시된 닌자 콤비는 스팀+에어프라이 복합 기능으로 한국 식문화(된장찌개+삼겹살 동시 조리)를 직접 반영한 현지화 마케팅 사례로 주목받음.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔍 브레빌 기회 영역</div>
+      <div class="card-sub">
+        커피머신 브랜드 신뢰도를 기반으로 주방가전 풀라인업(블렌더·푸드프로세서·토스터·에어프라이어) 크로스셀 전략이 핵심 성장 기회로 도출됨. 현재 커피머신 구매 고객 중 브레빌 블렌더·푸드프로세서 인지도는 낮은 수준으로, "브레빌 주방 생태계" 구성 유도를 위한 번들·캠페인 전략 수립이 요구됨. 건강·웰니스 트렌드 연계 스무디·조리 콘텐츠 마케팅 강화 필요.
+      </div>
+    </div>
+  </div>
+  <div class="footnote">
+    * 닌자 한국 진출: <a href="https://m.sedaily.com/NewsViewAmp/2GNMKD09S0" target="_blank">서울경제 2025.01.09</a> / <a href="https://www.hankookilbo.com/News/Read/A2025062315210001394" target="_blank">한국일보 2025.06.23</a> &nbsp;/&nbsp;
+    글로벌 소형가전 9.62조 원: 유로모니터 2025(뉴시스 인용) &nbsp;/&nbsp;
+    글로벌 블렌더 시장 CAGR 5.8%: <a href="https://www.businessresearchinsights.com/ko/market-reports/blenders-juicers-market-100202" target="_blank">Business Research Insights 2026.02</a> &nbsp;/&nbsp;
+    브레빌 소형가전 포지셔닝: <a href="https://www.gminsights.com/ko/industry-analysis/specialty-small-kitchen-appliances-market" target="_blank">Global Market Insights 2025.12</a>
+  </div>
+</section>
+
+<!-- ──────────────────── SECTION 6: 토스터 ──────────────────── -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">Section 06</div>
+    <div class="section-title">토스터 시장 현황 및 브랜드 분석</div>
+    <div class="section-desc">국내 프리미엄 토스터 시장 구도 및 발뮤다(BALMUDA), 스메그, 브레빌 등 주요 브랜드 전략과 현황을 분석함.</div>
+  </div>
+
+  <div class="kpi-grid" style="margin-bottom:18px;">
+    <div class="kpi">
+      <div class="kpi-label">발뮤다 한국 매출 (2024)</div>
+      <div class="kpi-value">약 230<span class="kpi-unit">억 원</span></div>
+      <div class="kpi-change dn">▼ 2022년(431억 원) 대비 -47%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">발뮤다 한국 시장 비중 (2022 peak)</div>
+      <div class="kpi-value">25<span class="kpi-unit">%</span></div>
+      <div class="kpi-change dn">▼ 현재 입지 축소 중</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">발뮤다 더 토스터 정가</div>
+      <div class="kpi-value">약 33<span class="kpi-unit">만 원</span></div>
+      <div class="kpi-change">리베이커(27만 원) 라인 추가</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">브레빌 스마트 토스터 가격대</div>
+      <div class="kpi-value">15–35<span class="kpi-unit">만 원</span></div>
+      <div class="kpi-change">공식몰 기준</div>
+    </div>
+  </div>
+
+  <table class="tbl" style="margin-bottom:14px;">
+    <thead>
+      <tr>
+        <th>브랜드</th>
+        <th>국적</th>
+        <th>주력 모델</th>
+        <th>가격대</th>
+        <th>핵심 기술/특징</th>
+        <th>마케팅 포인트</th>
+        <th>국내 현황</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="hl">발뮤다(BALMUDA)</td>
+        <td>🇯🇵 일본</td>
+        <td>더 토스터, 토스터 프로, 리베이커</td>
+        <td>27–40만 원</td>
+        <td>스팀 기술(물 5cc 투입)로 "죽은 빵도 되살린다". 5가지 모드(클래식, 샌드위치, 치즈 등) 토스팅</td>
+        <td>"빵을 살리는 토스터" 감성 스토리텔링. 인스타그램·블로그 중심 SNS 바이럴. 코스트코 입점으로 접근성 확대.</td>
+        <td><span class="tag tag-rose">부진 심화</span> 2022년 peak 이후 매출 반토막. 에어프라이어 경쟁 심화, 혁신 부재. 주가 2021년 9,000엔 → 2025년 850엔. 리베이커 출시로 가격 낮췄으나 회복 제한적.</td>
+      </tr>
+      <tr>
+        <td class="hl">브레빌(Breville)</td>
+        <td>🇦🇺 호주</td>
+        <td>the Toast Select Luxe, Smart Toast, Bit More</td>
+        <td>15–35만 원</td>
+        <td>A Bit More® 기술(추가 토스팅 버튼), 석영 요소 히터, 균일한 열 분산, 넓은 슬롯</td>
+        <td>커피머신 연계 "완벽한 아침 루틴" 크로스 마케팅. 기능성과 프리미엄 가치를 동시에 소구.</td>
+        <td><span class="tag tag-sky">성장 중</span> 커피머신 브랜드 파워 기반으로 인지도 상승 중. 발뮤다 공백 시장을 파고들 기회 존재. 국내 인지도는 커피머신 대비 낮음.</td>
+      </tr>
+      <tr>
+        <td class="hl">스메그(Smeg)</td>
+        <td>🇮🇹 이탈리아</td>
+        <td>TSF01, TSF02 2슬롯/4슬롯</td>
+        <td>25–55만 원</td>
+        <td>레트로 크롬 디자인, 6단계 갈색 조절, 다양한 색상(파스텔 계열)</td>
+        <td>인테리어 소품 포지셔닝. "주방을 꾸미는 오브제 가전." 색상·디자인 선택 폭 강조.</td>
+        <td><span class="tag tag-rose">부진</span> 한국 매출 2022년 대비 28% 감소. AS 불만족 이슈 지속. 위니아 제휴로 AS 개선 시도 중.</td>
+      </tr>
+      <tr>
+        <td><strong>드롱기(De'Longhi)</strong></td>
+        <td>🇮🇹 이탈리아</td>
+        <td>CTI4003, CTTI4003</td>
+        <td>15–30만 원</td>
+        <td>세라믹 코팅 히팅 요소, 자동 센터링 가이드, 에너지 절약 모드</td>
+        <td>커피머신 브랜드 신뢰 연계. 이탈리아 가전 패키지 소구.</td>
+        <td><span class="tag tag-gold">보합</span> 커피머신 구매 고객 대상 번들 수요 존재. 인지도는 스메그·발뮤다 대비 낮음.</td>
+      </tr>
+      <tr>
+        <td><strong>필립스(Philips)</strong></td>
+        <td>🇳🇱 네덜란드</td>
+        <td>HD2636, HD2640</td>
+        <td>5–15만 원</td>
+        <td>광폭 슬롯, 자동 팝업, 6단계 설정, 베이글·냉동빵 모드</td>
+        <td>가격 접근성. 대형마트·이커머스 가성비 포지션 유지.</td>
+        <td><span class="tag tag-gold">안정</span> 저가~중가 포지션에서 안정적 판매. 프리미엄 시장과 경쟁권은 낮음.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div class="chart-wrap">
+      <div class="chart-title">발뮤다 한국 시장 매출 추이 (억 원, 에디넷 공시 기준)</div>
+      <div class="chart-note">2022년 peak 이후 지속 하락. 2024년 약 230억 원 — 2022년 대비 47% 감소</div>
+      <div class="chart-canvas" style="height:200px;">
+        <canvas id="chartBalmuda"></canvas>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">🎯 브레빌 토스터 시장 기회 분석</div>
+        <div class="card-sub">
+          발뮤다의 급격한 부진으로 프리미엄 토스터 시장 내 점유 공백이 발생함. "기능 없는 디자인 가전"에 대한 소비자 피로감이 높아지며, 실질 성능 + 프리미엄 포지셔닝을 동시에 충족하는 브랜드로의 수요 이동이 확인됨. 브레빌은 ① 커피머신 충성 고객 기반 크로스셀, ② "아침 루틴 완성 패키지" 번들 마케팅, ③ 발뮤다 이탈 고객 흡수 전략을 동시에 추진 가능한 유리한 포지션 보유.
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">⚠️ 경쟁 위협 요인</div>
+        <div class="card-sub">
+          에어프라이어(삼성·LG·테팔·닌자) 신모델이 스팀·자동 조리 기능을 추가하며 프리미엄 토스터와 직접 경쟁 구도 형성 중. 토스터 단일 기능 한계 vs. 에어프라이어 다기능성이 핵심 경쟁 축으로 부상. 브레빌 대응 전략으로 토스터-에어프라이어 복합 제품(Joule Oven Air) 포지셔닝 강화 권장됨.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footnote">
+    * 발뮤다 매출 추이: 일본 에디넷 공시 기반 — <a href="https://www.kmib.co.kr/article/view.asp?arcid=1746603402" target="_blank">국민일보 2025.05.07</a> &nbsp;/&nbsp;
+    발뮤다 나무위키(2026 업데이트): <a href="https://namu.wiki/w/%EB%B0%9C%EB%AE%A4%EB%8B%A4" target="_blank">링크</a> &nbsp;/&nbsp;
+    스메그 한국 매출 -28%: <a href="https://v.daum.net/v/20250508002706752" target="_blank">국민일보 2025.05.08</a> &nbsp;/&nbsp;
+    브레빌 토스터 가격: <a href="https://www.breville.com/ko-kr" target="_blank">breville.com/ko-kr</a> 공식몰 기준(2026.06) &nbsp;/&nbsp;
+    발뮤다 코스트코 정가 269,900원: <a href="https://costcome.com/balmuda-toaster-beige-costco-price-summary-oven-type/" target="_blank">코스트컴 참조</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ── JS: Charts & Scroll ── -->
+<script>
+// Nav scroll
+function scrollTo(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+}
+
+// Active nav on scroll
+const sections = ['s0','s1','s2','s3','s4','s5','s6'];
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll',()=>{
+  let cur='s0';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el && window.scrollY >= el.offsetTop-80) cur=id;
+  });
+  navItems.forEach((n,i)=>{
+    n.classList.toggle('active', i===sections.indexOf(cur));
+  });
+});
+
+const COLORS = {
+  accent:'#d4622a', sky:'#2563a8', teal:'#1e8a6e',
+  gold:'#b08828', rose:'#b52e55', violet:'#6b3fb5',
+  ink3:'#5c6275', border:'#e2e4ea'
+};
+const baseOpts = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{legend:{labels:{font:{family:'Noto Sans KR, DM Sans',size:11},color:'#5c6275',boxWidth:12}}},
+  scales:{x:{ticks:{font:{family:'Noto Sans KR, DM Sans',size:11},color:'#5c6275'},grid:{color:'#f0f1f4'}},
+           y:{ticks:{font:{family:'Noto Sans KR, DM Sans',size:11},color:'#5c6275'},grid:{color:'#f0f1f4'}}}
+};
+
+// Chart 1: 홈커피 세그먼트 재정의
+new Chart(document.getElementById('chartType').getContext('2d'),{
+  type:'doughnut',
+  data:{
+    labels:['편의형 캡슐','원두 기반 전자동','드립·핸드브루','반자동·홈바리스타'],
+    datasets:[{data:[38,26,16,20],
+      backgroundColor:[COLORS.sky,'rgba(30,138,110,0.78)','rgba(176,136,40,0.75)','rgba(212,98,42,0.78)'],
+      borderWidth:2,borderColor:'#fff'}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'right',labels:{font:{family:'Noto Sans KR, DM Sans',size:10},color:'#5c6275',boxWidth:10}},
+    tooltip:{callbacks:{label:d=>`${d.label}: 전략 중요도 ${d.raw}`}}}}
+});
+
+// Chart 2: 홈커피 구매 동기의 변화
+new Chart(document.getElementById('chartFactor').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['맛·추출 재현성','취미·홈바리스타 경험','관리·청소 편의','주방 인테리어 조화','캡슐 대비 업그레이드'],
+    datasets:[{label:'전략 중요도',
+      data:[90,84,78,58,64],
+      backgroundColor:[COLORS.accent,COLORS.gold,COLORS.teal,COLORS.rose,COLORS.sky],
+      borderRadius:4,borderSkipped:false}]
+  },
+  options:{...baseOpts,indexAxis:'y',
+    plugins:{...baseOpts.plugins,legend:{display:false}},
+    scales:{
+      x:{...baseOpts.scales.x,ticks:{...baseOpts.scales.x.ticks,callback:v=>v},min:0,max:100},
+      y:{...baseOpts.scales.y,ticks:{font:{family:'Noto Sans KR, DM Sans',size:10},color:'#5c6275'}}
+    }
+  }
+});
+
+// ── 포지셔닝 맵용 공통 플러그인: 버블 위에 브랜드명 표시
+const bubbleLabelPlugin = {
+  id:'bubbleLabel',
+  afterDatasetsDraw(chart){
+    const {ctx}=chart;
+    ctx.save();
+    chart.data.datasets.forEach((ds,di)=>{
+      const meta=chart.getDatasetMeta(di);
+      meta.data.forEach((pt,pi)=>{
+        ctx.font='bold 10px "Noto Sans KR",sans-serif';
+        ctx.fillStyle='#1a1e2a';
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(ds.label, pt.x, pt.y);
+      });
+    });
+    ctx.restore();
+  }
+};
+
+const E='rgba(212,98,42,0.72)';
+const EC='#d4622a';
+const C='rgba(37,99,168,0.62)';
+const CC='#2563a8';
+const EB='rgba(212,50,0,0.88)';
+
+// Positioning Map 1: 가격 × 커피 관여도
+new Chart(document.getElementById('mapPrice').getContext('2d'),{
+  type:'bubble',
+  plugins:[bubbleLabelPlugin],
+  data:{datasets:[
+    {label:'★브레빌', data:[{x:120,y:86,r:17}], backgroundColor:EB, borderColor:'#a03010', borderWidth:2},
+    {label:'드롱기',   data:[{x:100,y:58,r:17}], backgroundColor:E,  borderColor:EC},
+    {label:'유라',     data:[{x:260,y:64,r:13}], backgroundColor:E,  borderColor:EC},
+    {label:'필립스',   data:[{x:75,y:42,r:14}],  backgroundColor:E,  borderColor:EC},
+    {label:'엘로치오', data:[{x:180,y:90,r:10}], backgroundColor:E,  borderColor:EC},
+    {label:'스메그',   data:[{x:140,y:48,r:10}], backgroundColor:E,  borderColor:EC},
+    {label:'제니퍼룸', data:[{x:40,y:34,r:8}],  backgroundColor:E,  borderColor:EC},
+    {label:'플랜잇',   data:[{x:25,y:44,r:7}],  backgroundColor:E,  borderColor:EC},
+    {label:'네스프레소',data:[{x:30,y:24,r:13}], backgroundColor:C,  borderColor:CC},
+    {label:'카누',      data:[{x:14,y:20,r:9}],  backgroundColor:C,  borderColor:CC}
+  ]},
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>`${d.dataset.label} (${d.raw.x}만원, 관여도 ${d.raw.y})`}}},
+    scales:{
+      x:{title:{display:true,text:'주력 모델 가격대(만 원)',font:{family:'Noto Sans KR,DM Sans',size:11},color:'#5c6275'},ticks:{font:{family:'Noto Sans KR,DM Sans',size:10},color:'#5c6275'},grid:{color:'#f0f1f4'},min:0,max:320},
+      y:{title:{display:true,text:'커피 관여도·추출 개입도',font:{family:'Noto Sans KR,DM Sans',size:11},color:'#5c6275'},ticks:{font:{family:'Noto Sans KR,DM Sans',size:10},color:'#5c6275'},grid:{color:'#f0f1f4'},min:0,max:100}
+    }
+  }
+});
+
+// Positioning Map 2: 편의성 × 커피 품질 인식
+new Chart(document.getElementById('mapMethod').getContext('2d'),{
+  type:'bubble',
+  plugins:[bubbleLabelPlugin],
+  data:{datasets:[
+    {label:'★브레빌', data:[{x:6.2,y:88,r:16}], backgroundColor:EB, borderColor:'#a03010', borderWidth:2},
+    {label:'드롱기',   data:[{x:8.6,y:76,r:16}], backgroundColor:E,  borderColor:EC},
+    {label:'유라',     data:[{x:9.4,y:88,r:12}], backgroundColor:E,  borderColor:EC},
+    {label:'필립스',   data:[{x:8.8,y:66,r:13}], backgroundColor:E,  borderColor:EC},
+    {label:'엘로치오', data:[{x:4.0,y:90,r:10}], backgroundColor:E,  borderColor:EC},
+    {label:'스메그',   data:[{x:6.8,y:62,r:10}], backgroundColor:E,  borderColor:EC},
+    {label:'제니퍼룸', data:[{x:8.2,y:58,r:8}],  backgroundColor:E,  borderColor:EC},
+    {label:'플랜잇',   data:[{x:5.2,y:52,r:7}],  backgroundColor:E,  borderColor:EC},
+    {label:'네스프레소',data:[{x:9.8,y:55,r:13}], backgroundColor:C, borderColor:CC},
+    {label:'카누',      data:[{x:9.8,y:54,r:9}], backgroundColor:C, borderColor:CC}
+  ]},
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>`${d.dataset.label} (편의성 ${d.raw.x}, 품질 인식 ${d.raw.y})`}}},
+    scales:{
+      x:{title:{display:true,text:'편의성·자동화 수준',font:{family:'Noto Sans KR,DM Sans',size:11},color:'#5c6275'},ticks:{font:{family:'Noto Sans KR,DM Sans',size:10},color:'#5c6275'},grid:{color:'#f0f1f4'},min:1,max:10.5},
+      y:{title:{display:true,text:'커피 품질 인식',font:{family:'Noto Sans KR,DM Sans',size:11},color:'#5c6275'},ticks:{font:{family:'Noto Sans KR,DM Sans',size:10},color:'#5c6275'},grid:{color:'#f0f1f4'},min:0,max:100}
+    }
+  }
+});
+
+// KBF Chart
+new Chart(document.getElementById('chartKbf').getContext('2d'),{
+  type:'radar',
+  data:{
+    labels:['맛·재현성','관리편의','가격/비용','그라인더','스팀/라떼아트','학습난이도','A/S신뢰','디자인','브랜드전문성','지속가능성'],
+    datasets:[{label:'중요도',data:[90,82,78,74,66,62,58,52,48,24],
+      backgroundColor:'rgba(212,98,42,0.12)',borderColor:COLORS.accent,
+      pointBackgroundColor:COLORS.accent,pointRadius:3,borderWidth:2}]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{r:{ticks:{font:{family:'Noto Sans KR, DM Sans',size:9},color:'#9399a8',backdropColor:'transparent'},pointLabels:{font:{family:'Noto Sans KR, DM Sans',size:10},color:'#5c6275'},grid:{color:'#e2e4ea'},angleLines:{color:'#e2e4ea'},min:0,max:100}}
+  }
+});
+
+// Balmuda chart
+new Chart(document.getElementById('chartBalmuda').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['2021','2022','2023','2024'],
+    datasets:[{label:'발뮤다 한국 매출 (억 원)',data:[350,431,310,230],
+      backgroundColor:[COLORS.sky,COLORS.accent,COLORS.gold,COLORS.rose],
+      borderRadius:5,borderSkipped:false}]
+  },
+  options:{...baseOpts,
+    plugins:{...baseOpts.plugins,legend:{display:false}},
+    scales:{...baseOpts.scales,
+      y:{...baseOpts.scales.y,ticks:{...baseOpts.scales.y.ticks,callback:v=>v+'억'}}}
+  }
+});
+</script>
+</body>
+</html>
